@@ -126,6 +126,22 @@ public class MainActivityTest {
         view.check(doesNotExist());
     }
 
+    @Test
+    public void appShouldErrorWhenDuplicateMovie() {
+        // Click on button to open addMovie dialog
+        onView(withId(R.id.buttonAddMovie)).perform(click());
+
+        // Input Movie Details
+        onView(withId(R.id.edit_title)).perform(ViewActions.typeText("Oppenheimer"));
+        onView(withId(R.id.edit_genre)).perform(ViewActions.typeText("Science Fiction"));
+        onView(withId(R.id.edit_year)).perform(ViewActions.typeText("2014"));
+
+        // Submit Form
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withId(R.id.edit_title)).check(matches(hasErrorText("A movie with this title is already on the list!")));
+    }
+
     @After
     public void tearDown() {
         String projectId = "lab-8-6757b";

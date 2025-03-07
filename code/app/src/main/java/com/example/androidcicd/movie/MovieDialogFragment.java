@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -131,6 +132,9 @@ public class MovieDialogFragment extends DialogFragment {
             return false;
         } else if (!isDigitsOnly(editMovieYear.getText())) {
             editMovieYear.setError("Movie year must be numeric!");
+            return false;
+        } else if (!movieProvider.uniqueTitle(String.valueOf(editMovieName.getText()))) {
+            editMovieName.setError("A movie with this title is already on the list!");
             return false;
         }
         return true;

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class MovieProvider {
     private static MovieProvider movieProvider;
-    private final ArrayList<Movie> movies;
+    private ArrayList<Movie> movies;
     private final CollectionReference movieCollection;
 
     private MovieProvider(FirebaseFirestore firestore) {
@@ -76,6 +76,24 @@ public class MovieProvider {
     }
 
     public boolean validMovie(Movie movie, DocumentReference docRef) {
-        return movie.getId().equals(docRef.getId()) && !movie.getTitle().isEmpty() && !movie.getGenre().isEmpty() && movie.getYear() > 0;
+        return movie.getId().equals(docRef.getId()) && !movie.getTitle().isEmpty() &&
+                !movie.getGenre().isEmpty() && movie.getYear() > 0 && uniqueTitle(movie.getTitle());
+    }
+
+    public boolean uniqueTitle(String title) {
+        for (int i = 0; i < movies.size(); i++) {
+            if (movies.get(i).getTitle().equals(title)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void setInstanceForTesting(FirebaseFirestore firestore) {
+        movieProvider = new MovieProvider(firestore);
+    }
+
+    public void setMovies (ArrayList<Movie> movies) {
+        this.movies = movies;
     }
 }
